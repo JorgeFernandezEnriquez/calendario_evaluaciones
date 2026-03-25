@@ -1,0 +1,92 @@
+/* Reset básico */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Fondo */
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: linear-gradient(135deg,#3a7bd5,#00d2ff);
+}
+
+/* Caja del login */
+.login-container{
+    background:white;
+    padding:40px;
+    border-radius:10px;
+    width:350px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* Título */
+.login-container h2{
+    text-align:center;
+    margin-bottom:25px;
+    color:#333;
+}
+
+/* Inputs */
+.login-container input{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    font-size:14px;
+    transition:0.3s;
+}
+
+/* focus input */
+.login-container input:focus{
+    border-color:#3a7bd5;
+    outline:none;
+    box-shadow:0 0 5px rgba(58,123,213,0.5);
+}
+
+/* botón */
+.login-container button{
+    width:100%;
+    padding:12px;
+    border:none;
+    background:#3a7bd5;
+    color:white;
+    font-size:15px;
+    border-radius:5px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+/* hover botón */
+.login-container button:hover{
+    background:#2f65b5;
+}
+
+/* mensaje error */
+.error{
+    color:red;
+    text-align:center;
+    margin-bottom:10px;
+}
+.login-container select{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    font-size:14px;
+}
+.error{
+    background:#fee2e2;
+    color:#991b1b;
+    padding:10px;
+    border-radius:5px;
+    text-align:center;
+    margin-bottom:15px;
+    font-size:14px;
+}
