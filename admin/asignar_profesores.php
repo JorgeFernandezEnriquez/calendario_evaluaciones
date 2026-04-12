@@ -37,7 +37,7 @@ if ($curso_id > 0) {
         LEFT JOIN curso_asignatura_profesor cap ON cap.curso_asignatura_id = ca.id
         LEFT JOIN usuarios u ON u.id = cap.usuario_id
         WHERE ca.curso_id = ?
-        ORDER BY a.nombre
+        ORDER BY ca.id
     ");
     $stmt->bind_param("i", $curso_id);
     $stmt->execute();

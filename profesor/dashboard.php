@@ -393,7 +393,7 @@ $stmtCursos = $conn->prepare("
     INNER JOIN curso_asignatura ca ON ca.id = cap.curso_asignatura_id
     INNER JOIN cursos c ON c.id = ca.curso_id
     WHERE cap.usuario_id = ?
-    ORDER BY c.nombre
+    ORDER BY c.id
 ");
 $stmtCursos->bind_param("i", $profesor_id);
 $stmtCursos->execute();
@@ -533,11 +533,17 @@ require "../includes/header.php";
             <div class="form-row">
                 <label>Tipo</label>
                 <select name="tipo" required>
-                    <option value="prueba" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'prueba' && isset($_POST['crear_evaluacion'])) ? 'selected' : ''; ?>>Prueba</option>
-                    <option value="control" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'control' && isset($_POST['crear_evaluacion'])) ? 'selected' : ''; ?>>Control</option>
-                    <option value="trabajo" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'trabajo' && isset($_POST['crear_evaluacion'])) ? 'selected' : ''; ?>>Trabajo</option>
-                    <option value="disertacion" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'disertacion' && isset($_POST['crear_evaluacion'])) ? 'selected' : ''; ?>>Disertación</option>
-                </select>
+        <option value="Prueba" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Prueba') ? 'selected' : ''; ?>>Prueba</option>
+        <option value="Control" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Control') ? 'selected' : ''; ?>>Control</option>
+        <option value="Trabajo" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Trabajo') ? 'selected' : ''; ?>>Trabajo</option>
+        <option value="Exposición" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Exposición') ? 'selected' : ''; ?>>Exposición</option>
+        <option value="Rúbrica" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Rúbrica') ? 'selected' : ''; ?>>Rúbrica</option>
+        <option value="Pauta de cotejo" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Pauta de cotejo') ? 'selected' : ''; ?>>Pauta de cotejo</option>
+        <option value="Escala de apreciación" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Escala de apreciación') ? 'selected' : ''; ?>>Escala de apreciación</option>
+        <option value="Trabajo grupal" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Trabajo grupal') ? 'selected' : ''; ?>>Trabajo grupal</option>
+        <option value="Bitácora" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Bitácora') ? 'selected' : ''; ?>>Bitácora</option>
+        <option value="Revisión cuaderno" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Revisión cuaderno') ? 'selected' : ''; ?>>Revisión cuaderno</option>
+    </select>
             </div>
 
             <div class="form-row">
@@ -631,11 +637,17 @@ require "../includes/header.php";
             <div class="form-row">
                 <label>Tipo</label>
                 <select name="tipo" id="tipo_editar" required>
-                    <option value="prueba" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'prueba' && (isset($_POST['editar_evaluacion']) || isset($_POST['eliminar_evaluacion']))) ? 'selected' : ''; ?>>Prueba</option>
-                    <option value="control" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'control' && (isset($_POST['editar_evaluacion']) || isset($_POST['eliminar_evaluacion']))) ? 'selected' : ''; ?>>Control</option>
-                    <option value="trabajo" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'trabajo' && (isset($_POST['editar_evaluacion']) || isset($_POST['eliminar_evaluacion']))) ? 'selected' : ''; ?>>Trabajo</option>
-                    <option value="disertacion" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'disertacion' && (isset($_POST['editar_evaluacion']) || isset($_POST['eliminar_evaluacion']))) ? 'selected' : ''; ?>>Disertación</option>
-                </select>
+    <option value="Prueba" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Prueba') ? 'selected' : ''; ?>>Prueba</option>
+    <option value="Control" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Control') ? 'selected' : ''; ?>>Control</option>
+    <option value="Trabajo" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Trabajo') ? 'selected' : ''; ?>>Trabajo</option>
+    <option value="Exposición" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Exposición') ? 'selected' : ''; ?>>Exposición</option>
+    <option value="Rúbrica" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Rúbrica') ? 'selected' : ''; ?>>Rúbrica</option>
+    <option value="Pauta de cotejo" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Pauta de cotejo') ? 'selected' : ''; ?>>Pauta de cotejo</option>
+    <option value="Escala de apreciación" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Escala de apreciación') ? 'selected' : ''; ?>>Escala de apreciación</option>
+    <option value="Trabajo grupal" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Trabajo grupal') ? 'selected' : ''; ?>>Trabajo grupal</option>
+    <option value="Bitácora" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Bitácora') ? 'selected' : ''; ?>>Bitácora</option>
+    <option value="Revisión cuaderno" <?php echo (isset($_POST['tipo']) && $_POST['tipo'] == 'Revisión cuaderno') ? 'selected' : ''; ?>>Revisión cuaderno</option>
+</select>
             </div>
 
             <div class="form-row">
@@ -814,19 +826,31 @@ document.addEventListener('DOMContentLoaded', function () {
     function colorPorEvento(esPropia, tipo) {
         if (esPropia) {
             switch (tipo) {
-                case 'prueba': return '#dc2626';
-                case 'control': return '#2563eb';
-                case 'trabajo': return '#16a34a';
-                case 'disertacion': return '#ca8a04';
-                default: return '#475569';
+                case 'Prueba': return '#f93333';
+                case 'Control': return '#3794fe';
+                case 'Trabajo': return '#42f484';
+                case 'Exposición': return '#f0cc3d';
+                case 'Rúbrica': return '#6f4cfa';
+                case 'Pauta de cotejo': return '#fbaa53';
+                case 'Escala de apreciación': return '#3be5fc';
+                case 'Trabajo grupal': return '#3eee9c';
+                case 'Bitácora': return '#fa64b6';
+                case 'Revisión cuaderno': return '#5088db';
+                default: return '#e5e7eb';
             }
         } else {
             switch (tipo) {
-                case 'prueba': return '#f87171';
-                case 'control': return '#60a5fa';
-                case 'trabajo': return '#4ade80';
-                case 'disertacion': return '#facc15';
-                default: return '#94a3b8';
+                case 'Prueba': return '#fca5a5';
+                case 'Control': return '#93c5fd';
+                case 'Trabajo': return '#86efac';
+                case 'Exposición': return '#fde68a';
+                case 'Rúbrica': return '#c4b5fd';
+                case 'Pauta de cotejo': return '#fdba74';
+                case 'Escala de apreciación': return '#67e8f9';
+                case 'Trabajo grupal': return '#a7f3d0';
+                case 'Bitácora': return '#f9a8d4';
+                case 'Revisión cuaderno': return '#d1d5db';
+                default: return '#e5e7eb';
             }
         }
     }

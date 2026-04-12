@@ -3,10 +3,10 @@ require "../includes/auth_utp.php";
 require "../bd/conexion.php";
 
 $tipo = isset($_GET['tipo']) ? $_GET['tipo'] : 'semana';
-if ($tipo !== 'mes') {
+
+if (!in_array($tipo, ['semana', 'proxima_semana', 'mes'])) {
     $tipo = 'semana';
 }
-
 /* CURSOS */
 $cursos = [];
 $resCursos = $conn->query("SELECT id, nombre FROM cursos ORDER BY id");
@@ -43,11 +43,17 @@ while ($row = $res->fetch_assoc()) {
 
 function colorTipo($tipo) {
     switch ($tipo) {
-        case 'prueba': return '#fca5a5';
-        case 'control': return '#93c5fd';
-        case 'trabajo': return '#86efac';
-        case 'disertacion': return '#fde68a';
-        default: return '#d1d5db';
+        case 'Prueba': return '#fca5a5';
+        case 'Control': return '#93c5fd';
+        case 'Trabajo': return '#86efac';
+        case 'Exposición': return '#fde68a';
+        case 'Rúbrica': return '#c4b5fd';
+        case 'Pauta de cotejo': return '#fdba74';
+        case 'Escala de apreciación': return '#67e8f9';
+        case 'Trabajo grupal': return '#a7f3d0';
+        case 'Bitácora': return '#f9a8d4';
+        case 'Revisión cuaderno': return '#d1d5db';
+        default: return '#e5e7eb';
     }
 }
 
@@ -75,6 +81,9 @@ $totalMinutos = ($horaFin - $horaInicio) * 60;
 $diaSemana = (int)$hoy->format('N');
 $lunes = clone $hoy;
 $lunes->modify('-' . ($diaSemana - 1) . ' days');
+if ($tipo === 'proxima_semana') {
+    $lunes->modify('+7 days');
+}
 
 $diasSemana = [];
 for ($i = 0; $i < 5; $i++) {
@@ -300,7 +309,7 @@ while ($cursor <= $finCalendarioMes) {
 
         .mes-grid{
     display:grid;
-    grid-template-columns:repeat(7, minmax(0,1fr));
+    grid-template-columns:repeat(5, minmax(0,1fr));
     border:1px solid #cbd5e1;
     border-bottom:none;
     width:100%;
@@ -383,16 +392,18 @@ while ($cursor <= $finCalendarioMes) {
             <div>
                 <h2><?php echo htmlspecialchars($curso['nombre']); ?></h2>
                 <div class="subtitulo">
-                    <?php if ($tipo === 'semana') { ?>
-                        Semana del <?php echo $diasSemana[0]->format('d-m-Y'); ?> al <?php echo $diasSemana[4]->format('d-m-Y'); ?>
-                    <?php } else { ?>
-                        Mes de <?php echo $hoy->format('m-Y'); ?>
-                    <?php } ?>
-                </div>
+    <?php if ($tipo === 'semana') { ?>
+        Semana del <?php echo $diasSemana[0]->format('d-m-Y'); ?> al <?php echo $diasSemana[4]->format('d-m-Y'); ?>
+    <?php } elseif ($tipo === 'proxima_semana') { ?>
+        Próxima semana del <?php echo $diasSemana[0]->format('d-m-Y'); ?> al <?php echo $diasSemana[4]->format('d-m-Y'); ?>
+    <?php } else { ?>
+        Mes de <?php echo $hoy->format('m-Y'); ?>
+    <?php } ?>
+</div>
             </div>
         </div>
 
-        <?php if ($tipo === 'semana') { ?>
+        <?php if ($tipo === 'semana' || $tipo === 'proxima_semana') { ?>
             <div class="contenedor-calendario">
                 <div class="semana">
                     <div class="semana-header">Hora</div>
@@ -439,7 +450,7 @@ while ($cursor <= $finCalendarioMes) {
                                     <div class="evento" style="top: <?php echo $top; ?>px; height: <?php echo $alto; ?>px; background: <?php echo $fondo; ?> !important;">
                                         <strong><?php echo htmlspecialchars($ev['asignatura']); ?></strong>
                                         <small><?php echo substr($ev['hora_inicio'], 0, 5); ?> · <?php echo (int)$ev['duracion_minutos']; ?> min</small>
-                                        <small><?php echo ucfirst($ev['tipo']); ?></small>
+                                        <small><?php echo $ev['tipo']; ?></small>
                                     </div>
                                 <?php
                                 }
@@ -456,10 +467,16 @@ while ($cursor <= $finCalendarioMes) {
                 <div class="mes-header">Miércoles</div>
                 <div class="mes-header">Jueves</div>
                 <div class="mes-header">Viernes</div>
-                <div class="mes-header">Sábado</div>
-                <div class="mes-header">Domingo</div>
 
-                <?php foreach ($diasMes as $dia) { ?>
+                <?php foreach ($diasMes as $dia) { 
+
+    $numeroDia = (int)$dia->format('N');
+
+    // Saltar sábado (6) y domingo (7)
+    if ($numeroDia >= 6) continue;
+
+?>
+                
                     <div class="mes-celda <?php echo ($dia->format('m') !== $hoy->format('m')) ? 'otro-mes' : ''; ?>">
                         <div class="mes-numero"><?php echo $dia->format('d'); ?></div>
 
@@ -474,7 +491,7 @@ while ($cursor <= $finCalendarioMes) {
                                 ?>
                                 <div class="evento-mes" style="background: <?php echo $fondo; ?> !important;">
                                     <strong><?php echo htmlspecialchars($ev['asignatura']); ?></strong><br>
-                                    <?php echo substr($ev['hora_inicio'], 0, 5); ?> · <?php echo ucfirst($ev['tipo']); ?>
+                                    <?php echo substr($ev['hora_inicio'], 0, 5); ?> · <?php echo $ev['tipo']; ?>
                                 </div>
                             <?php
                             }
@@ -489,7 +506,13 @@ while ($cursor <= $finCalendarioMes) {
             <div class="leyenda-item"><span class="muestra" style="background:#fca5a5 !important;"></span> Prueba</div>
             <div class="leyenda-item"><span class="muestra" style="background:#93c5fd !important;"></span> Control</div>
             <div class="leyenda-item"><span class="muestra" style="background:#86efac !important;"></span> Trabajo</div>
-            <div class="leyenda-item"><span class="muestra" style="background:#fde68a !important;"></span> Disertación</div>
+            <div class="leyenda-item"><span class="muestra" style="background:#fde68a !important;"></span> Exposición</div>
+            <div class="leyenda-item"><span class="muestra" style="background:#c4b5fd !important;"></span> Rúbrica</div>
+            <div class="leyenda-item"><span class="muestra" style="background:#fdba74 !important;"></span> Pauta de cotejo</div>
+            <div class="leyenda-item"><span class="muestra" style="background:#67e8f9 !important;"></span> Escala de apreciación</div>
+            <div class="leyenda-item"><span class="muestra" style="background:#a7f3d0 !important;"></span> Trabajo grupal</div>
+            <div class="leyenda-item"><span class="muestra" style="background:#f9a8d4 !important;"></span> Bitácora</div>
+            <div class="leyenda-item"><span class="muestra" style="background:#d1d5db !important;"></span> Revisión cuaderno</div>
         </div>
 
     </div>

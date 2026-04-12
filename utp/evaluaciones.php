@@ -241,6 +241,7 @@ require "../includes/header.php";
             <label for="tipo_exporte"><strong>Exportar:</strong></label>
             <select name="tipo" id="tipo_exporte">
                 <option value="semana">Esta semana</option>
+                <option value="proxima_semana">Próxima semana</option>
                 <option value="mes">Este mes</option>
             </select>
             <button type="submit" class="btn btn-secondary">PDF</button>
@@ -316,10 +317,16 @@ require "../includes/header.php";
             <div class="form-row">
                 <label>Tipo</label>
                 <select name="tipo" required>
-                    <option value="prueba">Prueba</option>
-                    <option value="control">Control</option>
-                    <option value="trabajo">Trabajo</option>
-                    <option value="disertacion">Disertación</option>
+                    <option value="Prueba">Prueba</option>
+                    <option value="Control">Control</option>
+                    <option value="Trabajo">Trabajo</option>
+                    <option value="Exposición">Exposición</option>
+                    <option value="Rúbrica">Rúbrica</option>
+                    <option value="Pauta de cotejo">Pauta de cotejo</option>
+                    <option value="Escala de apreciación">Escala de apreciación</option>
+                    <option value="Trabajo grupal">Trabajo grupal</option>
+                    <option value="Bitácora">Bitácora</option>
+                    <option value="Revisión cuaderno">Revisión cuaderno</option>
                 </select>
             </div>
 
@@ -386,10 +393,16 @@ require "../includes/header.php";
             <div class="form-row">
                 <label>Tipo</label>
                 <select name="tipo" id="tipo_editar" required>
-                    <option value="prueba">Prueba</option>
-                    <option value="control">Control</option>
-                    <option value="trabajo">Trabajo</option>
-                    <option value="disertacion">Disertación</option>
+                    <option value="Prueba">Prueba</option>
+                    <option value="Control">Control</option>
+                    <option value="Trabajo">Trabajo</option>
+                    <option value="Exposición">Exposición</option>
+                    <option value="Rúbrica">Rúbrica</option>
+                    <option value="Pauta de cotejo">Pauta de cotejo</option>
+                    <option value="Escala de apreciación">Escala de apreciación</option>
+                    <option value="Trabajo grupal">Trabajo grupal</option>
+                    <option value="Bitácora">Bitácora</option>
+                    <option value="Revisión cuaderno">Revisión cuaderno</option>
                 </select>
             </div>
 
