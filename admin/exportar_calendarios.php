@@ -4,7 +4,7 @@ require "../bd/conexion.php";
 
 $tipo = isset($_GET['tipo']) ? $_GET['tipo'] : 'semana';
 
-if (!in_array($tipo, ['semana', 'proxima_semana', 'mes'])) {
+if (!in_array($tipo, ['semana', 'proxima_semana', 'mes', 'proximo_mes'])) {
     $tipo = 'semana';
 }
 /* CURSOS */
@@ -93,8 +93,15 @@ for ($i = 0; $i < 5; $i++) {
 }
 
 /* DATOS PARA MES */
-$primerDiaMes = new DateTime($hoy->format('Y-m-01'));
-$ultimoDiaMes = new DateTime($hoy->format('Y-m-t'));
+if ($tipo === 'proximo_mes') {
+    $primerDiaMes = new DateTime($hoy->format('Y-m-01'));
+    $primerDiaMes->modify('+1 month');
+
+    $ultimoDiaMes = new DateTime($primerDiaMes->format('Y-m-t'));
+} else {
+    $primerDiaMes = new DateTime($hoy->format('Y-m-01'));
+    $ultimoDiaMes = new DateTime($hoy->format('Y-m-t'));
+}
 
 $inicioCalendarioMes = clone $primerDiaMes;
 while ((int)$inicioCalendarioMes->format('N') !== 1) {
@@ -315,6 +322,42 @@ while ($cursor <= $finCalendarioMes) {
     width:100%;
     max-width:100%;
 }
+/* =========================
+   MARCA DE AGUA (LOGO)
+========================= */
+
+.mes-grid{
+    position: relative;
+}
+
+.mes-grid::before{
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    width: 65%;
+    height: 65%;
+
+    transform: translate(-50%, -50%);
+
+    background-image: url('../img/logo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+
+    opacity: 0.07;
+
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Para que el contenido quede encima */
+.mes-grid > *{
+    position: relative;
+    z-index: 1;
+}
+
 
         .mes-header{
     background:#f8fafc !important;
@@ -330,6 +373,7 @@ while ($cursor <= $finCalendarioMes) {
             border-right:none;
         }
 
+        
         .mes-celda{
     min-height:105px;
     border-right:1px solid #cbd5e1;
@@ -338,7 +382,7 @@ while ($cursor <= $finCalendarioMes) {
     position:relative;
 }
 
-        .mes-celda:nth-child(7n){
+        .mes-celda:nth-child(5n){
             border-right:none;
         }
 
@@ -349,9 +393,9 @@ while ($cursor <= $finCalendarioMes) {
         }
 
         .otro-mes{
-            background:#f8fafc !important;
-            color:#94a3b8;
-        }
+    background: rgba(248, 250, 252, 0.6) !important; /* clave */
+    color:#94a3b8;
+}
 
         .evento-mes{
             border:1px solid #64748b;
@@ -397,8 +441,12 @@ while ($cursor <= $finCalendarioMes) {
     <?php } elseif ($tipo === 'proxima_semana') { ?>
         Próxima semana del <?php echo $diasSemana[0]->format('d-m-Y'); ?> al <?php echo $diasSemana[4]->format('d-m-Y'); ?>
     <?php } else { ?>
+    <?php if ($tipo === 'proximo_mes') { ?>
+        Mes de <?php echo $primerDiaMes->format('m-Y'); ?>
+    <?php } else { ?>
         Mes de <?php echo $hoy->format('m-Y'); ?>
     <?php } ?>
+<?php } ?>
 </div>
             </div>
         </div>
@@ -477,7 +525,13 @@ while ($cursor <= $finCalendarioMes) {
 
 ?>
                 
-                    <div class="mes-celda <?php echo ($dia->format('m') !== $hoy->format('m')) ? 'otro-mes' : ''; ?>">
+                    <?php
+$mesReferencia = ($tipo === 'proximo_mes') 
+    ? $primerDiaMes->format('m') 
+    : $hoy->format('m');
+?>
+
+<div class="mes-celda <?php echo ($dia->format('m') !== $mesReferencia) ? 'otro-mes' : ''; ?>">
                         <div class="mes-numero"><?php echo $dia->format('d'); ?></div>
 
                         <?php

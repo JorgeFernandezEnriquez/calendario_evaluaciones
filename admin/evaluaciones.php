@@ -239,6 +239,7 @@ require "../includes/header.php";
                 <option value="semana">Esta semana</option>
                 <option value="proxima_semana">Próxima semana</option>
                 <option value="mes">Este mes</option>
+                <option value="proximo_mes">Próximo mes</option>
             </select>
             <button type="submit" class="btn btn-secondary">PDF</button>
         </form>
